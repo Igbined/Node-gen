@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- Static File Serving ---
 app.use('/uploads', express.static(UPLOADS_DIR));
+app.use(express.static(__dirname));
 app.use('/U', express.static(U_DIR));
 app.use(express.static(path.join(__dirname, 'TEMPLATE')));
 
