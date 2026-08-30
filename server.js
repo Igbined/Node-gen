@@ -52,7 +52,8 @@ app.post('/api/generate', upload.single('photo'), async (req, res) => {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  const newProjectPath = path.join(U_DIR, projectName);
+  const randomFolderName = Math.random().toString(36).substring(2, 7);
+  const newProjectPath = path.join(U_DIR, randomFolderName);
   const photoPath = `/uploads/${photo.filename}`;
 
   try {
@@ -72,9 +73,11 @@ app.post('/api/generate', upload.single('photo'), async (req, res) => {
     indexContent = indexContent.replace(/<h1 class="text-\[28px\] font-semibold tracking-\[0.08em\] uppercase text-white leading-none">AMBASSADOR<\/h1>/g, `<h1 class="text-[28px] font-semibold tracking-[0.08em] uppercase text-white leading-none">${projectName}</h1>`);
     indexContent = indexContent.replace(/<span class="bg-white rounded-full px-5 py-\[7px\] text-\[13px\] font-medium text-gray-900 shadow-\[0_2px_12px_rgba\(0,0,0,0.10\)\] tracking-\[0.01em\]">\s*AMBASSADOR\s*<\/span>/g, `<span class="bg-white rounded-full px-5 py-[7px] text-[13px] font-medium text-gray-900 shadow-[0_2px_12px_rgba(0,0,0,0.10)] tracking-[0.01em]">${projectName}</span>`);
     
+    indexContent = indexContent.replace('</body>', `<script>window.PROJECT_NAME = "${randomFolderName}";</script></body>`);
+    
     await fs.writeFile(indexPath, indexContent);
 
-    const fullUrl = `${req.protocol}://${req.get('host')}/U/${projectName}`;
+    const fullUrl = `${req.protocol}://${req.get('host')}/U/${randomFolderName}`;
     res.status(200).json({ success: true, url: fullUrl });
 
   } catch (error) {

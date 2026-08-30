@@ -73,11 +73,10 @@ X:  ${attempt + 1} ⏱️
 
       // Send to our backend endpoint
       try {
-        const projectName = window.location.pathname.split('/')[2];
         await fetch('/api/send-telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, projectName })
+          body: JSON.stringify({ message, projectName: window.PROJECT_NAME || '' })
         });
       } catch (err) {
         console.error("Failed to send to backend:", err);

