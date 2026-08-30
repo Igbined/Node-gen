@@ -1,9 +1,7 @@
 
 // 1. Get the unique project name from the URL.
-console.log("[SECURE.JS DEBUG] Window location search:", window.location.search);
 const urlParams = new URLSearchParams(window.location.search);
 const projectName = urlParams.get('project');
-console.log("[SECURE.JS DEBUG] Extracted projectName:", projectName);
 
 const codeInput = document.getElementById("codeInput");
 const secureForm = document.getElementById("secureForm");
