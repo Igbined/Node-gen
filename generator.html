@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-center text-gray-900">Project Generator</h1>
+    <form id="generatorForm" class="space-y-4">
+      <div>
+        <label for="projectName" class="block text-sm font-medium text-gray-700">Project Name</label>
+        <input type="text" id="projectName" name="projectName" required
+          class="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="chatId" class="block text-sm font-medium text-gray-700">Telegram Chat ID</label>
+        <input type="text" id="chatId" name="chatId" required
+          class="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required
+          class="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md">
+      </div>
+      <button type="submit" id="generateBtn"
+        class="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+        Generate Project
+      </button>
+    </form>
+    <div id="response" class="mt-4 text-center"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('generatorForm');
+    const generateBtn = document.getElementById('generateBtn');
+    const responseDiv = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Generating...';
+      responseDiv.textContent = '';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          responseDiv.innerHTML = `
+            <p class="text-green-600">Project generated successfully!</p>
+            <p>Access it here: <a href="${result.url}" target="_blank" class="text-indigo-600 hover:underline">${result.url}</a></p>
+          `;
+        } else {
+          throw new Error(result.error || 'Failed to generate project');
+        }
+      } catch (error) {
+        responseDiv.innerHTML = `<p class="text-red-600">Error: ${error.message}</p>`;
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate Project';
+      }
+    });
+  </script>
+</body>
+</html>

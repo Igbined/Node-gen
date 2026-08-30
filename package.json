@@ -1,0 +1,15 @@
+{
+  "name": "node-gen",
+  "version": "1.0.0",
+  "description": "Voting App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.0.3",
+    "@vercel/kv": "^0.2.3",
+    "@vercel/blob": "^0.15.1"
+  }
+}
