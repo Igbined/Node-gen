@@ -89,8 +89,8 @@ app.post('/api/generate', upload.single('photo'), async (req, res) => {
   try {
     // 1. Copy template folder based on selection
     const templateDir = templateType === 'instagram-email' 
-      ? path.join(__dirname, 'template-email') 
-      : path.join(__dirname, 'TEMPLATE');
+      ? path.join(__dirname, 'TEMPLATE', 'template-email') 
+      : path.join(__dirname, 'TEMPLATE', 'template-web');
     await fs.copy(templateDir, newProjectPath);
 
     // 2. Update config.js
